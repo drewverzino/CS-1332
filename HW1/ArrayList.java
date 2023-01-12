@@ -1,3 +1,5 @@
+import java.util.NoSuchElementException;
+
 /**
  * Your implementation of an ArrayList.
  *
@@ -61,6 +63,11 @@ public class ArrayList<T> {
             // TODO: double backing array capacity
         }
 
+        for (int i = size - 1; i > index; i--) {
+            backingArray[i] = backingArray[i-1];
+        }
+        backingArray[index] = data;
+
     }
 
     /**
@@ -79,7 +86,7 @@ public class ArrayList<T> {
         }
 
         size++;
-        for (int i = 1; i < size; i++) {
+        for (int i = size - 1; i > 0; i--) {
             backingArray[i] = backingArray[i - 1];
         }
 
@@ -124,6 +131,14 @@ public class ArrayList<T> {
             throw new IndexOutOfBoundsException();
         }
 
+        T data = backingArray[index];
+        for (int i = index; i < size; i++) {
+            backingArray[i] = backingArray[i + 1];
+        }
+        backingArray[size - 1] = null;
+        size--;
+        return data;
+
     }
 
     /**
@@ -142,11 +157,12 @@ public class ArrayList<T> {
         }
         T data = backingArray[0];
 
-        for (int i = 1; i <= size - 1; i++) {
-            backingArray[i - 1] = backingArray[i];
+        for (int i = 0; i < size; i++) {
+            backingArray[i] = backingArray[i + 1];
         }
 
         backingArray[size - 1] = null;
+        size--;
         return data;
 
     }
@@ -165,6 +181,7 @@ public class ArrayList<T> {
         }
         T data = backingArray[size - 1];
         backingArray[size - 1] = null;
+        size--;
         return data;
 
     }
