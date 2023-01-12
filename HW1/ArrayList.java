@@ -59,8 +59,12 @@ public class ArrayList<T> {
         }
 
         size++;
-        if (size > backingArray.length) {
-            // TODO: double backing array capacity
+        if ( size > backingArray.length) {
+            T[] newArray = (T[]) new Object[backingArray.length * 2];
+            for (int i = 0; i < backingArray.length; i++) {
+                newArray[i] = backingArray[i];
+            }
+            backingArray = newArray;
         }
 
         for (int i = size - 1; i > index; i--) {
@@ -86,13 +90,18 @@ public class ArrayList<T> {
         }
 
         size++;
+        if ( size > backingArray.length) {
+            T[] newArray = (T[]) new Object[backingArray.length * 2];
+            for (int i = 0; i < backingArray.length; i++) {
+                newArray[i] = backingArray[i];
+            }
+            backingArray = newArray;
+        }
         for (int i = size - 1; i > 0; i--) {
             backingArray[i] = backingArray[i - 1];
         }
 
         backingArray[0] = data;
-
-        // TODO: Need case for when size > capacity
 
     }
 
@@ -109,9 +118,16 @@ public class ArrayList<T> {
             throw new IllegalArgumentException();
         }
         size++;
+        if ( size > backingArray.length) {
+            T[] newArray = (T[]) new Object[backingArray.length * 2];
+            for (int i = 0; i < backingArray.length; i++) {
+                newArray[i] = backingArray[i];
+            }
+            backingArray = newArray;
+        }
+
         backingArray[size - 1] = data;
 
-        // TODO: Need case for when size > capacity
 
     }
 
