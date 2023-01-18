@@ -51,15 +51,15 @@ public class ArrayList<T> {
      */
     public void addAtIndex(int index, T data) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Index must be greater than zero and within range of size.");
         }
 
-        if (data == null) { 
-            throw new IllegalArgumentException();
+        if (data == null) {
+            throw new IllegalArgumentException("Cannot insert null data into structure.");
         }
 
         size++;
-        if ( size > backingArray.length) {
+        if (size > backingArray.length) {
             T[] newArray = (T[]) new Object[backingArray.length * 2];
             for (int i = 0; i < backingArray.length; i++) {
                 newArray[i] = backingArray[i];
@@ -68,7 +68,7 @@ public class ArrayList<T> {
         }
 
         for (int i = size - 1; i > index; i--) {
-            backingArray[i] = backingArray[i-1];
+            backingArray[i] = backingArray[i - 1];
         }
         backingArray[index] = data;
 
@@ -85,18 +85,10 @@ public class ArrayList<T> {
      * @throws java.lang.IllegalArgumentException if data is null
      */
     public void addToFront(T data) {
-        if (data == null) {
-            throw new IllegalArgumentException();
-        }
+        nullCheck(data);
 
         size++;
-        if ( size > backingArray.length) {
-            T[] newArray = (T[]) new Object[backingArray.length * 2];
-            for (int i = 0; i < backingArray.length; i++) {
-                newArray[i] = backingArray[i];
-            }
-            backingArray = newArray;
-        }
+        resize();
         for (int i = size - 1; i > 0; i--) {
             backingArray[i] = backingArray[i - 1];
         }
@@ -114,17 +106,9 @@ public class ArrayList<T> {
      * @throws java.lang.IllegalArgumentException if data is null
      */
     public void addToBack(T data) {
-        if (data == null) {
-            throw new IllegalArgumentException();
-        }
+        nullCheck(data);
         size++;
-        if ( size > backingArray.length) {
-            T[] newArray = (T[]) new Object[backingArray.length * 2];
-            for (int i = 0; i < backingArray.length; i++) {
-                newArray[i] = backingArray[i];
-            }
-            backingArray = newArray;
-        }
+        resize();
 
         backingArray[size - 1] = data;
 
@@ -144,7 +128,7 @@ public class ArrayList<T> {
      */
     public T removeAtIndex(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Index must be greater than zero and within range of size.");
         }
 
         T data = backingArray[index];
@@ -169,7 +153,7 @@ public class ArrayList<T> {
      */
     public T removeFromFront() {
         if (size == 0) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("There are no elements in the list.");
         }
         T data = backingArray[0];
 
@@ -193,7 +177,7 @@ public class ArrayList<T> {
      */
     public T removeFromBack() {
         if (size == 0) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("There are no elements in the list.");
         }
         T data = backingArray[size - 1];
         backingArray[size - 1] = null;
@@ -213,7 +197,7 @@ public class ArrayList<T> {
      */
     public T get(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Index must be greater than zero and within range of size.");
         }
 
         return backingArray[index];
@@ -269,5 +253,30 @@ public class ArrayList<T> {
     public int size() {
         // DO NOT MODIFY THIS METHOD!
         return size;
+    }
+
+    /**
+     * Checks to see if passed data is null
+     *
+     * @param data the data being added to the list
+     * @throws java.lang.IllegalArgumentException if data is null
+     */
+    private void nullCheck(T data) {
+        if (data == null) {
+            throw new IllegalArgumentException("Cannot insert null data into structure.");
+        }
+    }
+
+    /**
+     * Helper method to resize backing array ot be twice its original capacity
+     */
+    private void resize() {
+        if (size > backingArray.length) {
+            T[] newArray = (T[]) new Object[backingArray.length * 2];
+            for (int i = 0; i < backingArray.length; i++) {
+                newArray[i] = backingArray[i];
+            }
+            backingArray = newArray;
+        }
     }
 }

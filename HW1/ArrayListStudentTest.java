@@ -59,6 +59,39 @@ public class ArrayListStudentTest {
     }
 
     @Test(timeout = TIMEOUT)
+    public void testAddAtIndexFull() {
+        list.addAtIndex(0, "2a");   // 2a
+        list.addAtIndex(0, "1a");   // 1a, 2a
+        list.addAtIndex(2, "4a");   // 1a, 2a, 4a
+        list.addAtIndex(2, "3a");   // 1a, 2a, 3a, 4a
+        list.addAtIndex(0, "0a");   // 0a, 1a, 2a, 3a, 4a
+        list.addAtIndex(0, "0a");   // 0a, 0a, 1a, 2a, 3a, 4a
+        list.addAtIndex(0, "0a");   // 0a, 0a, 0a, 1a, 2a, 3a, 4a
+        list.addAtIndex(0, "0a");   // 0a, 0a, 0a, 0a, 1a, 2a, 3a, 4a
+        list.addAtIndex(0, "0a");   // 0a, 0a, 0a, 0a, 0a, 1a, 2a, 3a, 4a
+
+
+        assertEquals(9, list.size());
+
+        Object[] expected = new Object[ArrayList.INITIAL_CAPACITY * 2];
+        expected[0] = "0a";
+        expected[1] = "0a";
+        expected[2] = "0a";
+        expected[3] = "0a";
+        expected[4] = "0a";
+        expected[5] = "1a";
+        expected[6] = "2a";
+        expected[7] = "3a";
+        expected[8] = "4a";
+        expected[9] = "test";
+        list.addAtIndex(9, "test");
+        assertEquals(10, list.size());
+        assertArrayEquals(expected, list.getBackingArray());
+
+
+    }
+
+    @Test(timeout = TIMEOUT)
     public void testAddToFront() {
         list.addToFront("4a");  // 4a
         list.addToFront("3a");  // 3a, 4a
