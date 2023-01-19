@@ -50,28 +50,22 @@ public class ArrayList<T> {
      * @throws java.lang.IllegalArgumentException  if data is null
      */
     public void addAtIndex(int index, T data) {
-        if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("Index must be greater than zero and within range of size.");
-        }
-
-        if (data == null) {
-            throw new IllegalArgumentException("Cannot insert null data into structure.");
-        }
-
         size++;
-        if (size > backingArray.length) {
-            T[] newArray = (T[]) new Object[backingArray.length * 2];
-            for (int i = 0; i < backingArray.length; i++) {
-                newArray[i] = backingArray[i];
-            }
-            backingArray = newArray;
+        if (index < 0 || index >= size) {
+            size--;
+            throw new IndexOutOfBoundsException(
+                    String.format("Index must be within [0, %d).", size));
         }
+
+        nullCheck(data);
+
+
+        resize();
 
         for (int i = size - 1; i > index; i--) {
             backingArray[i] = backingArray[i - 1];
         }
         backingArray[index] = data;
-
     }
 
     /**
@@ -94,7 +88,6 @@ public class ArrayList<T> {
         }
 
         backingArray[0] = data;
-
     }
 
     /**
@@ -111,8 +104,6 @@ public class ArrayList<T> {
         resize();
 
         backingArray[size - 1] = data;
-
-
     }
 
     /**
@@ -128,7 +119,8 @@ public class ArrayList<T> {
      */
     public T removeAtIndex(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index must be greater than zero and within range of size.");
+            throw new IndexOutOfBoundsException(
+                    String.format("Index must be within [0, %d).", size));
         }
 
         T data = backingArray[index];
@@ -197,7 +189,8 @@ public class ArrayList<T> {
      */
     public T get(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index must be greater than zero and within range of size.");
+            throw new IndexOutOfBoundsException(
+                String.format("Index must be within [0, %d).", size));
         }
 
         return backingArray[index];
