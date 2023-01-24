@@ -51,7 +51,7 @@ public class ArrayList<T> {
      */
     public void addAtIndex(int index, T data) {
         size++;
-        if (index < 0 || index >= size) {
+        if (index < 0 || index > size) {
             size--;
             throw new IndexOutOfBoundsException(
                     String.format("Index must be within [0, %d).", size));
@@ -118,7 +118,7 @@ public class ArrayList<T> {
      * @throws java.lang.IndexOutOfBoundsException if index < 0 or index >= size
      */
     public T removeAtIndex(int index) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException(
                     String.format("Index must be within [0, %d).", size));
         }
@@ -188,9 +188,9 @@ public class ArrayList<T> {
      * @throws java.lang.IndexOutOfBoundsException if index < 0 or index >= size
      */
     public T get(int index) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException(
-                String.format("Index must be within [0, %d).", size));
+                    String.format("Index must be within [0, %d).", size));
         }
 
         return backingArray[index];
