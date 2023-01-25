@@ -185,6 +185,7 @@ public class MyTest {
         Object[] arr = new Object[]{3,5,4,5,5,7};
         assertEquals((Object) 1, list.removeLastOccurrence(1));
         assertEquals(--n, list.size());
+        System.out.println(list.toArray());
         assertArrayEquals(arr, list.toArray());
 
         arr = new Object[]{3,5,4,5,7};

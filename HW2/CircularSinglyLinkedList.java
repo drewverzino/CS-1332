@@ -45,6 +45,8 @@ public class CircularSinglyLinkedList<T> {
 
         if (index == 0) {
             addToFront(data);
+        } else if (index == size) {
+            addToBack(data);
         } else {
             CircularSinglyLinkedListNode<T> newNode = new CircularSinglyLinkedListNode<>(data);
             CircularSinglyLinkedListNode<T> curr = head;
@@ -95,7 +97,7 @@ public class CircularSinglyLinkedList<T> {
             throw new IllegalArgumentException("The data you are adding is null.");
         }
         if (head == null) {
-            head =  new CircularSinglyLinkedListNode<>(data);
+            head = new CircularSinglyLinkedListNode<>(data);
             head.setNext(head);
         } else {
             CircularSinglyLinkedListNode<T> newNode = new CircularSinglyLinkedListNode<>(head.getData());
@@ -121,8 +123,12 @@ public class CircularSinglyLinkedList<T> {
             throw new IndexOutOfBoundsException(String.format("You must access an index within [0, %d).", size));
         }
 
+        if (index == 0) {
+            return removeFromFront();
+        }
+
         CircularSinglyLinkedListNode<T> curr = head;
-        for (int i = 0; i < index - 1; i++) {
+        for (int i = 1; i < index; i++) {
             curr = curr.getNext();
         }
 
@@ -251,7 +257,7 @@ public class CircularSinglyLinkedList<T> {
         CircularSinglyLinkedListNode<T> lastOccurrence = null;
         CircularSinglyLinkedListNode<T> curr = head;
         for (int i = 0; i < size; i++) {
-            if (curr.getData() == data) {
+            if (curr.getData().equals(data)) {
                  lastOccurrence = curr;
             }
             curr = curr.getNext();
@@ -259,6 +265,12 @@ public class CircularSinglyLinkedList<T> {
 
         if (lastOccurrence == null) {
             throw new NoSuchElementException("There are no elements with data " + data + " in the list.");
+        }
+
+        if (lastOccurrence.equals(head)) {
+            return removeFromFront();
+        } else if (lastOccurrence.getNext() == null) {
+            return removeFromBack();
         }
 
         curr = head;
