@@ -258,7 +258,7 @@ public class CircularSinglyLinkedList<T> {
         CircularSinglyLinkedListNode<T> curr = head;
         for (int i = 0; i < size; i++) {
             if (curr.getData().equals(data)) {
-                 lastOccurrence = curr;
+                lastOccurrence = curr;
             }
             curr = curr.getNext();
         }
