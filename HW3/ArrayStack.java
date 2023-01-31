@@ -50,14 +50,15 @@ public class ArrayStack<T> {
         if (data == null) {
             throw new IllegalArgumentException("");
         }
-        if (++size > backingArray.length) {
+        if (size == backingArray.length) {
             T[] newArray = (T[]) new Object[backingArray.length * 2];
             for (int i = 0; i < backingArray.length; i++) {
                 newArray[i] = backingArray[i];
             }
             backingArray = newArray;
         }
-        backingArray[size - 1] = data;
+        backingArray[size] = data;
+        size++;
     }
 
     /**
