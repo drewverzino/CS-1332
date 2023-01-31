@@ -35,7 +35,7 @@ public class LinkedQueue<T> {
      */
     public void enqueue(T data) {
         if (data == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The data you are enqueuing is null.");
         }
 
         LinkedNode<T> temp = new LinkedNode<>(data);
@@ -58,7 +58,7 @@ public class LinkedQueue<T> {
      */
     public T dequeue() {
         if (size == 0) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("There are no elements in the queue.");
         }
 
         T removed = head.getData();
@@ -81,7 +81,7 @@ public class LinkedQueue<T> {
      */
     public T peek() {
         if (size == 0) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("There are no elements in the queue.");
         }
 
         return head.getData();

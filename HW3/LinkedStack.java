@@ -34,7 +34,7 @@ public class LinkedStack<T> {
      */
     public void push(T data) {
         if (data == null) {
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException("The data you are pushing is null.");
         }
 
         if (head == null) {
@@ -57,7 +57,7 @@ public class LinkedStack<T> {
      */
     public T pop() {
         if (head == null) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("There are no elements in the stack.");
         }
 
         T removed = head.getData();
@@ -76,7 +76,7 @@ public class LinkedStack<T> {
      */
     public T peek() {
         if (head == null) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("There are no elements in the stack.");
         }
         return head.getData();
     }

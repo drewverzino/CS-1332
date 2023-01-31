@@ -48,8 +48,9 @@ public class ArrayStack<T> {
      */
     public void push(T data) {
         if (data == null) {
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException("The data you are pushing is null.");
         }
+
         if (size == backingArray.length) {
             T[] newArray = (T[]) new Object[backingArray.length * 2];
             for (int i = 0; i < backingArray.length; i++) {
@@ -75,7 +76,7 @@ public class ArrayStack<T> {
      */
     public T pop() {
         if (size == 0) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("There are no elements in the stack.");
         }
         T removed = backingArray[size - 1];
         backingArray[--size] = null;
@@ -92,7 +93,7 @@ public class ArrayStack<T> {
      */
     public T peek() {
         if (size == 0) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("There are no elements in the stack.");
         }
         return backingArray[size - 1];
     }
