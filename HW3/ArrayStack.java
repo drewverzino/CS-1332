@@ -58,8 +58,7 @@ public class ArrayStack<T> {
             }
             backingArray = newArray;
         }
-        backingArray[size] = data;
-        size++;
+        backingArray[size++] = data;
     }
 
     /**
