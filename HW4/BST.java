@@ -220,14 +220,25 @@ public class BST<T extends Comparable<? super T>> {
         if (data == null) {
             throw new IllegalArgumentException("The data you are accessing is null.");
         }
-        BSTNode<T> curr = root;
-        while (curr != null) {
-            if (curr.getData().equals(data)) {
-                return curr.getData();
-            } else if (curr.getData().compareTo(data) > 0) {
-                curr = curr.getLeft();
+        return get(root, data);
+    }
+
+    /**
+     * Helper method for get method.
+     *
+     * @param node current node of subtree.
+     * @param data data of type T being retrieved.
+     * @return node's data that is being retrieved.
+     * @throws java.util.NoSuchElementException if the data is not in the tree
+     */
+    private T get(BSTNode<T> node, T data) {
+        if (node != null) {
+            if (node.getData().equals(data)) {
+                return node.getData();
+            } else if (node.getData().compareTo(data) > 0) {
+                return get(node.getLeft(), data);
             } else {
-                curr = curr.getRight();
+                return get(node.getRight(), data);
             }
         }
 
@@ -253,14 +264,25 @@ public class BST<T extends Comparable<? super T>> {
         if (data == null) {
             throw new IllegalArgumentException("The data you are accessing is null.");
         }
-        BSTNode<T> curr = root;
-        while (curr != null) {
-            if (curr.getData().equals(data)) {
+
+        return contains(root, data);
+    }
+
+    /**
+     * Helper method for contains method.
+     *
+     * @param node current node of subtree.
+     * @param data data of type T being searched.
+     * @return true if data is in tree, false otherwise.
+     */
+    private boolean contains(BSTNode<T> node, T data) {
+        if (node != null) {
+            if (node.getData().equals(data)) {
                 return true;
-            } else if (curr.getData().compareTo(data) > 0) {
-                curr = curr.getLeft();
+            } else if (node.getData().compareTo(data) > 0) {
+                return contains(node.getLeft(), data);
             } else {
-                curr = curr.getRight();
+                return contains(node.getRight(), data);
             }
         }
 
@@ -475,8 +497,6 @@ public class BST<T extends Comparable<? super T>> {
             throw new IllegalArgumentException(String.format("You must access [0, %d) elements.", size));
         }
         List<T> kElements = new ArrayList<>();
-        BSTNode<T> current = root;
-
         reverseInOrder(root, k, kElements);
 
         return kElements;
