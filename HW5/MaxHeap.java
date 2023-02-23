@@ -66,7 +66,7 @@ public class MaxHeap<T extends Comparable<? super T>> {
      */
     public MaxHeap(ArrayList<T> data) {
         if (data == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The list you passed is null.");
         }
 
         size = data.size();
@@ -74,7 +74,7 @@ public class MaxHeap<T extends Comparable<? super T>> {
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i) == null) {
                 clear();
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("An element in the list is null.");
             }
             backingArray[i + 1] = data.get(i);
         }
@@ -97,7 +97,7 @@ public class MaxHeap<T extends Comparable<? super T>> {
      */
     public void add(T data) {
         if (data == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The data you are adding is null.");
         }
         checkCapacity();
         backingArray[++size] = data;
@@ -116,7 +116,7 @@ public class MaxHeap<T extends Comparable<? super T>> {
      */
     public T remove() {
         if (isEmpty()) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("There are no elements in the heap.");
         }
 
         T removed = backingArray[1];
@@ -135,7 +135,7 @@ public class MaxHeap<T extends Comparable<? super T>> {
      */
     public T getMax() {
         if (isEmpty()) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("There are no elements in the heap.");
         }
         return backingArray[1];
     }
