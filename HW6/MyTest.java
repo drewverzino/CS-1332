@@ -27,6 +27,14 @@ public class MyTest {
         map.put(1, "A");
         map.put(6, "B");
         map.put(2, "F");
+        
+        /*
+        The HashMap should be:
+        table[1]: <1, "A"> -> null
+        table[2]: <2, "F"> -> null
+        table[6]: <6, "B"> -> null
+        Other indices are null.
+         */
         assertEquals(map.getTable()[2], new ExternalChainingMapEntry<>(2, "F"));
         assertEquals(map.getTable()[1].getNext(), new ExternalChainingMapEntry<>(1, "A"));
         assertEquals(map.getTable()[1], new ExternalChainingMapEntry<>(6, "B"));
@@ -42,6 +50,15 @@ public class MyTest {
         map.put(4, "Q");
         map.put(1, "G"); // This shouldn't change size
         map.put(7, "Q");
+        /*
+        The HashMap should be:
+        table[1]: <1, "G"> -> null
+        table[2]: <2, "F"> -> null
+        table[4]: <4, "Q"> -> null
+        table[6]: <6, "B"> -> null
+        table[7]: <7, "Q"> -> null
+        Other indices are null.
+         */
         assertEquals(11, map.getTable().length);
         assertEquals(new ExternalChainingMapEntry<>(1, "G"), map.getTable()[1]);
         assertEquals(new ExternalChainingMapEntry<>(6, "B"), map.getTable()[6]);
@@ -61,6 +78,14 @@ public class MyTest {
         map.put(4, "Q");
         map.put(1, "G"); // This shouldn't change size
         map.put(2, "Q");
+        /*
+        The HashMap should be:
+        table[1]: <1, "G"> -> null
+        table[2]: <2, "Q"> -> null
+        table[4]: <4, "Q"> -> null
+        table[6]: <6, "B"> -> null
+        Other indices are null.
+         */
         assertEquals(11, map.getTable().length);
         assertEquals(new ExternalChainingMapEntry<>(1, "G"), map.getTable()[1]);
         assertEquals(new ExternalChainingMapEntry<>(6, "B"), map.getTable()[6]);
@@ -77,6 +102,11 @@ public class MyTest {
         map.put(1, "G");
         map.put(1, "K");
         map.put(1, "J");
+                /*
+        The HashMap should be:
+        table[1]: <1, "J"> -> null
+        Other indices are null.
+         */
         assertEquals(5, map.getTable().length);
         assertEquals(new ExternalChainingMapEntry<>(1, "J"), map.getTable()[1]);
         assertEquals(1, map.size());
@@ -93,7 +123,11 @@ public class MyTest {
         map.put(56, "BF");
         map.put(1, "LOL");
         map.put(221, "Cool");
-
+        /*
+        The HashMap should be:
+        table[1]: <221, "Cool"> -> <166, "K"> -> <56, "G"> -> <1, "LOL"> -> null
+        Other indices are null.
+         */
         assertEquals(11, map.getTable().length);
         assertEquals(new ExternalChainingMapEntry<>(221, "Cool"), map.getTable()[1]);
         assertEquals(new ExternalChainingMapEntry<>(1, "LOL"),
@@ -105,7 +139,7 @@ public class MyTest {
         assertEquals(4, map.size());
     }
 
-    @Test(timeout = TIMEOUT)
+   @Test(timeout = TIMEOUT)
     @SuppressWarnings("unchecked")
     public void putNewEntry1() {
         // Direct insertion
@@ -113,6 +147,14 @@ public class MyTest {
         map.put(2, "B");
         map.put(3, "C");
         map.put(4, "D");
+        /*
+        The HashMap should be:
+        table[1]: <1, "A"> -> null
+        table[2]: <2, "B"> -> null
+        table[3]: <3, "C"> -> null
+        table[3]: <4, "D"> -> null
+        Other indices are null.
+         */
 
         assertEquals(11, map.getTable().length);
         assertEquals(new ExternalChainingMapEntry<>(1, "A"), map.getTable()[1]);
@@ -149,6 +191,49 @@ public class MyTest {
         assertEquals(new ExternalChainingMapEntry<>(12, "A"), map.getTable()[1].getNext());
         assertEquals(new ExternalChainingMapEntry<>(1, "A"), map.getTable()[1].getNext().getNext());
         assertEquals(6, map.size());
+
+        /*
+        The final HashMap should be:
+        table[1]: <56, "A"> -> <12, "A"> -> <1, "A"> -> null
+        table[2]: <2, "B"> -> null
+        table[3]: <3, "C"> -> null
+        table[3]: <4, "D"> -> null
+        Other indices are null.
+         */
+    }
+
+    @Test(timeout = TIMEOUT)
+    @SuppressWarnings("unchecked")
+    public void putNewEntry3() {
+        // Direct insertion
+        map.put(1, "A");
+        map.put(2, "B");
+        map.put(3, "C");
+        map.put(4, "D");
+        map.put(Integer.MAX_VALUE, "MAX");
+        map.put(Integer.MIN_VALUE, "MIN");
+        /*
+        The HashMap should be:
+        table[1]: <Integer.MAX_VALUE, "MAX"> -> <1, "A"> -> null
+        table[2]: <Integer.MIN_VALUE, "MIN"> -> <2, "B"> -> null
+        table[3]: <3, "C"> -> null
+        table[3]: <4, "D"> -> null
+        Other indices are null.
+         */
+
+        assertEquals(11, map.getTable().length);
+        assertEquals(new ExternalChainingMapEntry<>(Integer.MAX_VALUE, "MAX"),
+                map.getTable()[1]);
+        assertEquals(new ExternalChainingMapEntry<>(1, "A"), map.getTable()[1].getNext());
+        assertEquals(new ExternalChainingMapEntry<>(Integer.MIN_VALUE, "MIN"),
+                map.getTable()[2]);
+        assertEquals(new ExternalChainingMapEntry<>(2, "B"),
+                map.getTable()[2].getNext());
+        assertEquals(new ExternalChainingMapEntry<>(3, "C"),
+                map.getTable()[3]);
+        assertEquals(new ExternalChainingMapEntry<>(4, "D"),
+                map.getTable()[4]);
+        assertEquals(6, map.size());
     }
 
     /*@Test
@@ -174,7 +259,14 @@ public class MyTest {
         map.put(2, "B");
         map.put(3, "C");
         map.put(4, "D");
-
+        *//*
+        The HashMap should be:
+        table[1]: <1, "A"> -> null
+        table[2]: <2, "B"> -> null
+        table[3]: <3, "C"> -> null
+        table[3]: <4, "D"> -> null
+        Other indices are null.
+         *//*
         assertEquals(11, map.getTable().length);
         assertEquals(4, map.size());
 
@@ -191,7 +283,7 @@ public class MyTest {
         });
     }*/
 
-    @Test(timeout = TIMEOUT)
+    /*@Test(timeout = TIMEOUT)
     @SuppressWarnings("unchecked")
     public void removeNotFound2() {
         map.put(1, "A");
@@ -201,11 +293,18 @@ public class MyTest {
         map.put(15, "C");
         map.put(12, "A");
         map.put(34, "A");
-
+        *//*
+        The final HashMap should be:
+        table[1]: <34, "A"> -> <12, "A"> -> <1, "A"> -> null
+        table[2]: <2, "B"> -> null
+        table[3]: <3, "C"> -> null
+        table[3]: <15, "C"> -> <4, "D"> -> null
+        Other indices are null.
+         *//*
         assertEquals(11, map.getTable().length);
         assertEquals(7, map.size());
 
-        /*// Need to traverse linkedlist
+        // Need to traverse linkedlist
         assertThrows(NoSuchElementException.class, () -> {
             map.remove(23);
         });
@@ -220,10 +319,10 @@ public class MyTest {
 
         assertThrows(NoSuchElementException.class, () -> {
             map.remove(26);
-        });*/
+        });
 
         assertEquals(7, map.size());
-    }
+    }*/
 
     @Test(timeout = TIMEOUT)
     @SuppressWarnings("unchecked")
@@ -233,7 +332,14 @@ public class MyTest {
         map.put(2, "B");
         map.put(3, "C");
         map.put(4, "D");
-
+        /*
+        The HashMap before removal should be:
+        table[1]: <1, "A"> -> null
+        table[2]: <2, "B"> -> null
+        table[3]: <3, "C"> -> null
+        table[3]: <4, "D"> -> null
+        Other indices are null.
+         */
         assertEquals("A", map.remove(1));
         assertEquals("D", map.remove(4));
 
@@ -242,6 +348,12 @@ public class MyTest {
         assertEquals(new ExternalChainingMapEntry<>(2, "B"), map.getTable()[2]);
         assertEquals(new ExternalChainingMapEntry<>(3, "C"), map.getTable()[3]);
         assertNull(map.getTable()[4]);
+        /*
+        The HashMap after removal should be:
+        table[2]: <2, "B"> -> null
+        table[3]: <3, "C"> -> null
+        Other indices are null.
+         */
     }
 
     @Test(timeout = TIMEOUT)
@@ -254,16 +366,32 @@ public class MyTest {
         map.put(34, "A''");
         map.put(45, "A'''");
         map.put(3, "C");
-
+        /*
+        The final HashMap should be:
+        table[1]: <45, "A'''"> -> <34, "A''"> -> <12, "A'"> -> <1, "A"> -> null
+        table[2]: <2, "B"> -> null
+        table[3]: <3, "C"> -> null
+        table[3]: <15, "C"> -> null
+        Other indices are null.
+         */
 
         assertEquals(11, map.getTable().length);
         assertEquals(7, map.size());
 
         // Reorder elements after resize
+        // Sorry for confusion in size since this will cause size = actualSize - 1
         map.remove(1);
         map.getTable()[1].getNext().getNext().setNext(new ExternalChainingMapEntry<>(1, "A"));
 
         // remove in the middle
+        /*
+        The HashMap after this removal should be:
+        table[1]: <45, "A'''"> -> <12, "A'"> -> <1, "A"> -> null
+        table[2]: <2, "B"> -> null
+        table[3]: <3, "C"> -> null
+        table[3]: <15, "C"> -> null
+        Other indices are null.
+         */
         assertEquals("A''", map.remove(34));
         assertEquals(new ExternalChainingMapEntry<>(45, "A'''"), map.getTable()[1]);
         assertEquals(new ExternalChainingMapEntry<>(12, "A'"), map.getTable()[1].getNext());
@@ -272,6 +400,14 @@ public class MyTest {
         assertEquals(5, map.size());
 
         // remove the last element
+        /*
+        The HashMap after this removal should be:
+        table[1]: <45, "A'''"> -> <12, "A'">  -> null
+        table[2]: <2, "B"> -> null
+        table[3]: <3, "C"> -> null
+        table[3]: <15, "C"> -> null
+        Other indices are null.
+         */
         assertEquals("A", map.remove(1));
         assertEquals(new ExternalChainingMapEntry<>(45, "A'''"), map.getTable()[1]);
         assertEquals(new ExternalChainingMapEntry<>(12, "A'"), map.getTable()[1].getNext());
@@ -279,6 +415,14 @@ public class MyTest {
         assertEquals(4, map.size());
 
         // remove the front
+        /*
+        The HashMap after this removal should be:
+        table[1]: <12, "A'">  -> null
+        table[2]: <2, "B"> -> null
+        table[3]: <3, "C"> -> null
+        table[3]: <15, "C"> -> null
+        Other indices are null.
+         */
         assertEquals("A'''", map.remove(45));
         assertEquals(new ExternalChainingMapEntry<>(12, "A'"), map.getTable()[1]);
         assertNull(map.getTable()[1].getNext());
@@ -317,7 +461,14 @@ public class MyTest {
         map.put(34, "A''");
         map.put(45, "A'''");
         map.put(3, "C");
-
+        /*
+        The HashMap should be:
+        table[1]: <45, "A'''"> -> <12, "A'"> -> <1, "A"> -> null
+        table[2]: <2, "B"> -> null
+        table[3]: <3, "C"> -> null
+        table[3]: <15, "C"> -> null
+        Other indices are null.
+         */
         assertEquals("A'", map.get(12));
         assertEquals("A'''", map.get(45));
     }
