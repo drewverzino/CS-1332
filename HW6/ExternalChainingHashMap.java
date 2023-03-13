@@ -112,7 +112,7 @@ public class ExternalChainingHashMap<K, V> {
         }
 
         int index = hashFunction(key);
-        for (ExternalChainingMapEntry<K,V> curr = table[index]; curr != null; curr = curr.getNext()) {
+        for (ExternalChainingMapEntry<K, V> curr = table[index]; curr != null; curr = curr.getNext()) {
             if (curr.getKey().equals(key)) {
                 V old = curr.getValue();
                 curr.setValue(value);
@@ -161,6 +161,12 @@ public class ExternalChainingHashMap<K, V> {
         throw new NoSuchElementException("Key does not exist in the map.");
     }
 
+    /**
+     * Helper method that returns the compressed hash of a key.
+     *
+     * @param key the key an index is generated for
+     * @return the index in the array that the key hashes to
+     */
     private int hashFunction(K key) {
         int hash = key.hashCode();
         return Math.abs(hash % table.length);
@@ -275,7 +281,8 @@ public class ExternalChainingHashMap<K, V> {
      */
     public void resizeBackingTable(int length) {
         if (length < size) {
-            throw new IllegalArgumentException("The length you are resizing to is less than the number of items in the map.");
+            throw new IllegalArgumentException(
+                    "The length you are resizing to is less than the number of items in the map.");
         }
 
         ExternalChainingMapEntry<K, V>[] newTable = new ExternalChainingMapEntry[length];
