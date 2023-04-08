@@ -35,7 +35,8 @@ public class PatternMatching {
     public static List<Integer> kmp(CharSequence pattern, CharSequence text,
                                     CharacterComparator comparator) {
         if (text == null || comparator == null || pattern == null || pattern.length() == 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The text, comparator, and pattern must be not null, "
+                    + "and the pattern must be of length greater than 0.");
         }
 
         ArrayList<Integer> list = new ArrayList<>();
@@ -94,7 +95,7 @@ public class PatternMatching {
                                           CharacterComparator comparator) {
 
         if (pattern == null || comparator == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The pattern or comparator cannot be null.");
         }
 
 
@@ -108,11 +109,11 @@ public class PatternMatching {
         while (j < pattern.length()) {
             int compare = comparator.compare(pattern.charAt(i), pattern.charAt(j));
             if (compare == 0) {
-              f[j++] = ++i;
+                f[j++] = ++i;
             } else if (i == 0) {
-              f[j++] = 0;
+                f[j++] = 0;
             } else {
-              i = f[i - 1];
+                i = f[i - 1];
             }
         }
         return f;
@@ -140,7 +141,8 @@ public class PatternMatching {
                                            CharSequence text,
                                            CharacterComparator comparator) {
         if (text == null || comparator == null || pattern == null || pattern.length() == 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The text, comparator, and pattern must be not null, "
+                    + "and the pattern must be of length greater than 0.");
         }
 
         ArrayList<Integer> list = new ArrayList<>();
@@ -197,7 +199,7 @@ public class PatternMatching {
      */
     public static Map<Character, Integer> buildLastTable(CharSequence pattern) {
         if (pattern == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The pattern cannot be null.");
         }
 
         int m = pattern.length();
@@ -277,7 +279,8 @@ public class PatternMatching {
                                           CharSequence text,
                                           CharacterComparator comparator) {
         if (pattern == null || pattern.length() == 0 || text == null || comparator == null) {
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException("The text, comparator, and pattern must be not null, "
+                    + "and the pattern must be of length greater than 0.");
         }
 
         ArrayList<Integer> list = new ArrayList<>();
