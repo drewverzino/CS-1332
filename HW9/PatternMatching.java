@@ -343,6 +343,42 @@ public class PatternMatching {
     public static List<Integer> boyerMooreGalilRule(CharSequence pattern,
                                           CharSequence text,
                                           CharacterComparator comparator) {
-        return null; // if you are not implementing this method, do NOT modify this line
+        if (text == null || comparator == null || pattern == null || pattern.length() == 0) {
+            throw new IllegalArgumentException("The text, comparator, and pattern must be not null, "
+                    + "and the pattern must be of length greater than 0.");
+        }
+
+        ArrayList<Integer> list = new ArrayList<>();
+        int m = pattern.length();
+        int n = text.length();
+        if (m > n) {
+            return list;
+        }
+
+        HashMap<Character, Integer> last = (HashMap<Character, Integer>) PatternMatching.buildLastTable(pattern);
+        int[] failure = PatternMatching.buildFailureTable(pattern, comparator);
+        int i = 0;
+        int k = m - failure[m - 1];
+        int w = 0;
+        while (i <= n - m) {
+            int j = m - 1;
+            while (j >= w && comparator.compare(text.charAt(i + j), pattern.charAt(j)) == 0) {
+                j--;
+            }
+            if (j < w) {
+                list.add(i);
+                i += k;
+                w = m - k;
+            } else {
+                int shift = last.getOrDefault(text.charAt(i + j), -1);
+                if (shift < j) {
+                    i += j - shift;
+                } else {
+                    i++;
+                }
+                w = 0;
+            }
+        }
+        return list;
     }
 }
