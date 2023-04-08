@@ -97,7 +97,11 @@ public class PatternMatching {
             throw new IllegalArgumentException();
         }
 
+
         int[] f = new int[pattern.length()];
+        if (pattern.length() == 0) {
+            return f;
+        }
         f[0] = 0;
         int i = 0;
         int j = 1;
@@ -272,9 +276,49 @@ public class PatternMatching {
     public static List<Integer> rabinKarp(CharSequence pattern,
                                           CharSequence text,
                                           CharacterComparator comparator) {
+        if (pattern == null || pattern.length() == 0 || text == null || comparator == null) {
+            throw new IllegalArgumentException("");
+        }
 
-        return null;
+        ArrayList<Integer> list = new ArrayList<>();
+        int m = pattern.length();
+        int n = text.length();
+        if (m > n) {
+            return list;
+        }
+
+        int product = BASE;
+        int patternHash = pattern.charAt(m - 1);
+        int textHash = text.charAt(m - 1);
+        for (int i = m - 2; i >= 0; i--) {
+            textHash += text.charAt(i) * product;
+            patternHash += pattern.charAt(i) * product;
+            if (i != 0) {
+                product *= BASE;
+            }
+        }
+
+        for (int i = 0; i <= n - m; i++) {
+            if (patternHash == textHash) {
+                int j;
+                for (j = 0; j < m; j++) {
+                    if (comparator.compare(text.charAt(i + j), pattern.charAt(j)) != 0) {
+                        break;
+                    }
+                }
+
+                if (j == m) {
+                    list.add(i);
+                }
+            }
+            if (i != n - m) {
+                textHash = (textHash - text.charAt(i) * product) * BASE + text.charAt(i + m);
+            }
+        }
+
+        return list;
     }
+
 
     /**
      * This method is OPTIONAL and for extra credit only.
