@@ -1,13 +1,19 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 
 /**
  * Your implementation of various different graph algorithms.
  *
- * @author YOUR NAME HERE
- * @userid YOUR USER ID HERE (i.e. gburdell3)
- * @GTID YOUR GT ID HERE (i.e. 900000000)
+ * @author Andrew Verzino
+ * @userid averzino3
+ * @GTID 903696663
  * @version 1.0
  */
 public class GraphAlgorithms {
@@ -38,7 +44,26 @@ public class GraphAlgorithms {
      *                                  doesn't exist in the graph
      */
     public static <T> List<Vertex<T>> bfs(Vertex<T> start, Graph<T> graph) {
+        if (start == null || graph == null || !graph.getVertices().contains(start)) {
+            throw new IllegalArgumentException();
+        }
 
+
+        ArrayList<Vertex<T>> visited = new ArrayList<>();
+        Queue<Vertex<T>> queue = new LinkedList<>();
+        visited.add(start);
+        queue.add(start);
+        while (queue.peek() != null) {
+            Vertex<T> v = queue.poll();
+            for (VertexDistance<T> w : graph.getAdjList().get(v)) {
+                if (!visited.contains(w.getVertex())) {
+                    visited.add(w.getVertex());
+                    queue.add(w.getVertex());
+                }
+            }
+        }
+
+        return visited;
     }
 
     /**
@@ -70,7 +95,23 @@ public class GraphAlgorithms {
      *                                  doesn't exist in the graph
      */
     public static <T> List<Vertex<T>> dfs(Vertex<T> start, Graph<T> graph) {
+        if (start == null || graph == null || !graph.getVertices().contains(start)) {
+            throw new IllegalArgumentException();
+        }
 
+        ArrayList<Vertex<T>> visited = new ArrayList<>();
+        dfs(start, graph, visited);
+
+        return visited;
+    }
+
+    private static <T> void dfs(Vertex<T> vertex, Graph<T> graph, List<Vertex<T>> visited) {
+        visited.add(vertex);
+        for (VertexDistance<T> w : graph.getAdjList().get(vertex)) {
+            if (!visited.contains(w.getVertex())) {
+                dfs(w.getVertex(), graph, visited);
+            }
+        }
     }
 
     /**
@@ -107,7 +148,33 @@ public class GraphAlgorithms {
      */
     public static <T> Map<Vertex<T>, Integer> dijkstras(Vertex<T> start,
                                                         Graph<T> graph) {
-        
+        if (start == null || graph == null || !graph.getVertices().contains(start)) {
+            throw new IllegalArgumentException();
+        }
+
+        Set<Vertex<T>> visited = new HashSet<>();
+        Map<Vertex<T>, Integer> distanceMap = new HashMap<>();
+        PriorityQueue<VertexDistance<T>> pq = new PriorityQueue<>();
+        for (Vertex<T> v : graph.getVertices()) {
+            distanceMap.put(v, Integer.MAX_VALUE);
+        }
+        distanceMap.put(start, 0);
+        pq.add(new VertexDistance<>(start, 0));
+        while (pq.peek() != null) {
+            VertexDistance<T> u = pq.poll();
+            int d = u.getDistance();
+            Vertex<T> v = u.getVertex();
+            if (!visited.contains(v)) {
+                visited.add(v);
+                distanceMap.put(v, Math.min(distanceMap.get(v), d));
+                for (VertexDistance<T> w : graph.getAdjList().get(v)) {
+                    if (!visited.contains(w.getVertex())) {
+                        pq.add(new VertexDistance<>(w.getVertex(), d + w.getDistance()));
+                    }
+                }
+            }
+        }
+        return distanceMap;
     }
 
     /**
@@ -147,6 +214,30 @@ public class GraphAlgorithms {
      *                                  doesn't exist in the graph.
      */
     public static <T> Set<Edge<T>> prims(Vertex<T> start, Graph<T> graph) {
+        if (start == null || graph == null || !graph.getVertices().contains(start)) {
+            throw new IllegalArgumentException();
+        }
 
+        Set<Vertex<T>> visited = new HashSet<>();
+        Set<Edge<T>> edges = new HashSet<>();
+        PriorityQueue<Edge<T>> pq = new PriorityQueue<>();
+        for (Edge<T> e : graph.getEdges()) {
+            pq.add(e);
+        }
+
+        visited.add(start);
+        while (pq.peek() != null) {
+            Edge<T> e = pq.poll();
+            if (!visited.contains(e.getV())) {
+                visited.add(e.getV());
+                edges.add(e);
+                for (Edge<T> edge: graph.getEdges()) {
+                    if (!visited.contains(edge.getV())) {
+                        pq.add(edge);
+                    }
+                }
+            }
+        }
+        return edges;
     }
 }
