@@ -45,7 +45,8 @@ public class GraphAlgorithms {
      */
     public static <T> List<Vertex<T>> bfs(Vertex<T> start, Graph<T> graph) {
         if (start == null || graph == null || !graph.getVertices().contains(start)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Your inputs are null, or the start vertex "
+                    + "is not contained in the graph.");
         }
 
 
@@ -96,7 +97,8 @@ public class GraphAlgorithms {
      */
     public static <T> List<Vertex<T>> dfs(Vertex<T> start, Graph<T> graph) {
         if (start == null || graph == null || !graph.getVertices().contains(start)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Your inputs are null, or the start vertex "
+                    + "is not contained in the graph.");
         }
 
         ArrayList<Vertex<T>> visited = new ArrayList<>();
@@ -156,7 +158,8 @@ public class GraphAlgorithms {
     public static <T> Map<Vertex<T>, Integer> dijkstras(Vertex<T> start,
                                                         Graph<T> graph) {
         if (start == null || graph == null || !graph.getVertices().contains(start)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Your inputs are null, or the start vertex "
+                    + "is not contained in the graph.");
         }
 
         Set<Vertex<T>> visited = new HashSet<>();
@@ -167,7 +170,7 @@ public class GraphAlgorithms {
         }
         distanceMap.put(start, 0);
         pq.add(new VertexDistance<>(start, 0));
-        while (!pq.isEmpty()) {
+        while (!pq.isEmpty() && !visited.containsAll(graph.getVertices())) {
             VertexDistance<T> u = pq.poll();
             int d = u.getDistance();
             Vertex<T> v = u.getVertex();
@@ -222,27 +225,28 @@ public class GraphAlgorithms {
      */
     public static <T> Set<Edge<T>> prims(Vertex<T> start, Graph<T> graph) {
         if (start == null || graph == null || !graph.getVertices().contains(start)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Your inputs are null, or the start vertex "
+                    + "is not contained in the graph.");
         }
 
         Set<Vertex<T>> visited = new HashSet<>();
         Set<Edge<T>> edges = new HashSet<>();
         PriorityQueue<Edge<T>> pq = new PriorityQueue<>();
-        for (Edge<T> edge : graph.getEdges()) {
-            if (edge.getU().equals(start) || edge.getV().equals(start)) {
-                pq.add(edge); // edge(s, v) or edge(u, s)
-            }
+
+        for (VertexDistance<T> distance: graph.getAdjList().get(start)) {
+            pq.add(new Edge<T>(start, distance.getVertex(), distance.getDistance()));
         }
 
         visited.add(start);
         while (!pq.isEmpty() && !visited.containsAll(graph.getVertices())) {
-            Edge<T> e = pq.poll(); // edge(u, w)
-            if (!visited.contains(e.getV())) { // if visited doesn't contain w
-                visited.add(e.getV());
-                edges.add(e);
-                for (Edge<T> edge : graph.getEdges()) {
-                    if (edge.getV().equals(e.getV()) && !visited.contains(edge.getV())) {
-                        pq.add(edge);
+            Edge<T> edge = pq.poll();
+            if (!visited.contains(edge.getV())) {
+                visited.add(edge.getV());
+                edges.add(edge);
+                edges.add(new Edge<T>(edge.getV(), edge.getU(), edge.getWeight()));
+                for (VertexDistance<T> distance : graph.getAdjList().get(edge.getV())) {
+                    if (!visited.contains(distance.getVertex())) {
+                        pq.add(new Edge<T>(edge.getV(), distance.getVertex(), distance.getDistance()));
                     }
                 }
             }
