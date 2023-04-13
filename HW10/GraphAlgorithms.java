@@ -53,7 +53,7 @@ public class GraphAlgorithms {
         Queue<Vertex<T>> queue = new LinkedList<>();
         visited.add(start);
         queue.add(start);
-        while (queue.peek() != null) {
+        while (!queue.isEmpty()) {
             Vertex<T> v = queue.poll();
             for (VertexDistance<T> w : graph.getAdjList().get(v)) {
                 if (!visited.contains(w.getVertex())) {
@@ -105,6 +105,13 @@ public class GraphAlgorithms {
         return visited;
     }
 
+    /**
+     * Helper method for Depth-First Search
+     * @param vertex Current vertex node in graph
+     * @param graph Graph we are searching
+     * @param visited Set containing all visited vertices in graph
+     * @param <T> Generic type of data in vertex
+     */
     private static <T> void dfs(Vertex<T> vertex, Graph<T> graph, List<Vertex<T>> visited) {
         visited.add(vertex);
         for (VertexDistance<T> w : graph.getAdjList().get(vertex)) {
@@ -160,7 +167,7 @@ public class GraphAlgorithms {
         }
         distanceMap.put(start, 0);
         pq.add(new VertexDistance<>(start, 0));
-        while (pq.peek() != null) {
+        while (!pq.isEmpty()) {
             VertexDistance<T> u = pq.poll();
             int d = u.getDistance();
             Vertex<T> v = u.getVertex();
@@ -221,23 +228,25 @@ public class GraphAlgorithms {
         Set<Vertex<T>> visited = new HashSet<>();
         Set<Edge<T>> edges = new HashSet<>();
         PriorityQueue<Edge<T>> pq = new PriorityQueue<>();
-        for (Edge<T> e : graph.getEdges()) {
-            pq.add(e);
+        for (Edge<T> edge : graph.getEdges()) {
+            if (edge.getU().equals(start) || edge.getV().equals(start)) {
+                pq.add(edge); // edge(s, v) or edge(u, s)
+            }
         }
 
         visited.add(start);
-        while (pq.peek() != null) {
-            Edge<T> e = pq.poll();
-            if (!visited.contains(e.getV())) {
+        while (!pq.isEmpty() && !visited.containsAll(graph.getVertices())) {
+            Edge<T> e = pq.poll(); // edge(u, w)
+            if (!visited.contains(e.getV())) { // if visited doesn't contain w
                 visited.add(e.getV());
                 edges.add(e);
-                for (Edge<T> edge: graph.getEdges()) {
-                    if (!visited.contains(edge.getV())) {
+                for (Edge<T> edge : graph.getEdges()) {
+                    if (edge.getV().equals(e.getV()) && !visited.contains(edge.getV())) {
                         pq.add(edge);
                     }
                 }
             }
         }
-        return edges;
+        return edges.size() != 0 ? edges : null;
     }
 }
