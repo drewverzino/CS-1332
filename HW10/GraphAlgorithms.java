@@ -251,6 +251,9 @@ public class GraphAlgorithms {
                 }
             }
         }
-        return edges.size() != 0 ? edges : null;
+        if (edges.size() != 2 * (graph.getVertices().size() - 1)) {
+            return null;
+        }
+        return edges;
     }
 }
